@@ -14,7 +14,6 @@ data/
 venv
 .idea
 **/artifacts/
-**/models/
 
 __pycache__/
 **.env
