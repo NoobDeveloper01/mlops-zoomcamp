@@ -52,7 +52,8 @@ blocks:
 - all_upstream_blocks_executed: true
   color: null
   configuration: {}
-  downstream_blocks: []
+  downstream_blocks:
+  - sklearn
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -66,6 +67,22 @@ blocks:
   - training_set
   - load_models
   uuid: hyperparameter_tuning/sklearn
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: sklearn
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - hyperparameter_tuning/sklearn
+  uuid: sklearn
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}
@@ -88,6 +105,8 @@ spark_config: {}
 tags: []
 type: python
 uuid: sklearn_training
-variables: {}
+variables:
+  max_evaluations: 50
+  random_state: 7
 variables_dir: /home/src/mage_data/mlops
 widgets: []
