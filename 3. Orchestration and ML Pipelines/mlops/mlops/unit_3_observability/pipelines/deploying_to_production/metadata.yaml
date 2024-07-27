@@ -103,7 +103,7 @@ blocks:
   language: python
   name: Teardown deployed resources
   retry_config: null
-  status: failed
+  status: executed
   timeout: null
   type: custom
   upstream_blocks:
