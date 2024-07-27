@@ -20,6 +20,7 @@ def run_terraform_commands(subfolder: str) -> None:
 
 
 def terraform_apply() -> None:
+    print(TERRAFORM_AWS_FULL_PATH)
     run_terraform_commands(TERRAFORM_AWS_FULL_PATH)
 
 

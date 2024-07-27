@@ -7,5 +7,5 @@ if 'custom' not in globals():
 
 @custom
 def deploy(*args, **kwargs):
-    update_boto3_client()
+    update_boto3_client("MageDeployer")
     terraform_apply()
