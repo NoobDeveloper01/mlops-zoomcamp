@@ -71,7 +71,6 @@ def save_results(df, y_pred, run_id, output_file):
     df_result['predicted_duration'] = y_pred
     df_result['diff'] = df_result['actual_duration'] - df_result['predicted_duration']
     df_result['model_version'] = run_id
-
     df_result.to_parquet(output_file, index=False)
 
 
@@ -101,8 +100,10 @@ def get_paths(run_date, taxi_type, run_id):
     month = prev_month.month 
 
     input_file = f'https://d37ci6vzurychx.cloudfront.net/trip-data/{taxi_type}_tripdata_{year:04d}-{month:02d}.parquet'
-    output_file = f'output/{taxi_type}/{year:04d}-{month:02d}.parquet'
-
+    base_dir = os.path.abspath(os.path.dirname(__file__))  # Gets the directory of the current file
+    output_file = os.path.join(base_dir, f'output/{taxi_type}/{year:04d}-{month:02d}.parquet')
+    print("Current working directory:", os.getcwd())
+    print(output_file)
     return input_file, output_file
 
 
@@ -115,6 +116,7 @@ def ride_duration_prediction(
         ctx = get_run_context()
         run_date = ctx.flow_run.expected_start_time
     
+    print(run_date)
     input_file, output_file = get_paths(run_date, taxi_type, run_id)
 
     apply_model(
