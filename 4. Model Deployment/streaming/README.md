@@ -32,6 +32,10 @@ base64.b64decode(data_encoded).decode('utf-8')
 
 Record example
 
+```
+encoded_data=$(echo -n '{"ride": {"PULocationID": 130,"DOLocationID": 205,"trip_distance": 3.66}, "ride_id": 156}' | base64)
+```
+
 ```json
 {
     "ride": {
@@ -46,17 +50,11 @@ Record example
 Sending this record
 
 ```bash
-aws kinesis put-record \
+sudo aws kinesis put-record \
     --stream-name ${KINESIS_STREAM_INPUT} \
     --partition-key 1 \
-    --data '{
-        "ride": {
-            "PULocationID": 130,
-            "DOLocationID": 205,
-            "trip_distance": 3.66
-        }, 
-        "ride_id": 156
-    }'
+    --data "${encoded_data}"
+
 ```
 
 ### Test event
