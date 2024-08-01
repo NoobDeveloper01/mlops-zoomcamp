@@ -32,10 +32,6 @@ base64.b64decode(data_encoded).decode('utf-8')
 
 Record example
 
-```
-encoded_data=$(echo -n '{"ride": {"PULocationID": 130,"DOLocationID": 205,"trip_distance": 3.66}, "ride_id": 156}' | base64)
-```
-
 ```json
 {
     "ride": {
@@ -50,10 +46,17 @@ encoded_data=$(echo -n '{"ride": {"PULocationID": 130,"DOLocationID": 205,"trip_
 Sending this record
 
 ```bash
-sudo aws kinesis put-record \
+ aws kinesis put-record \
     --stream-name ${KINESIS_STREAM_INPUT} \
     --partition-key 1 \
-    --data "${encoded_data}"
+    --data '{
+        "ride": {
+            "PULocationID": 130,
+            "DOLocationID": 205,
+            "trip_distance": 3.66
+        }, 
+        "ride_id": 123
+    }'
 
 ```
 
@@ -107,7 +110,7 @@ echo ${RESULT} | jq -r '.Records[0].Data' | base64 --decode
 
 ```bash
 export PREDICTIONS_STREAM_NAME="ride_predictions"
-export RUN_ID="e1efc53e9bd149078b0c12aeaa6365df"
+export RUN_ID="d083afe9a0f44058a273598b3d7eeb93"
 export TEST_RUN="True"
 
 python test.py
@@ -121,9 +124,9 @@ docker build -t stream-model-duration:v1 .
 docker run -it --rm \
     -p 8080:8080 \
     -e PREDICTIONS_STREAM_NAME="ride_predictions" \
-    -e RUN_ID="e1efc53e9bd149078b0c12aeaa6365df" \
+    -e RUN_ID="d083afe9a0f44058a273598b3d7eeb93" \
     -e TEST_RUN="True" \
-    -e AWS_DEFAULT_REGION="eu-west-1" \
+    -e AWS_DEFAULT_REGION="eu-east-1" \
     stream-model-duration:v1
 ```
 
@@ -141,7 +144,7 @@ To use AWS CLI, you may need to set the env variables:
 docker run -it --rm \
     -p 8080:8080 \
     -e PREDICTIONS_STREAM_NAME="ride_predictions" \
-    -e RUN_ID="e1efc53e9bd149078b0c12aeaa6365df" \
+    -e RUN_ID="d083afe9a0f44058a273598b3d7eeb93" \
     -e TEST_RUN="True" \
     -e AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}" \
     -e AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \
@@ -155,7 +158,7 @@ Alternatively, you can mount the `.aws` folder with your credentials to the `.aw
 docker run -it --rm \
     -p 8080:8080 \
     -e PREDICTIONS_STREAM_NAME="ride_predictions" \
-    -e RUN_ID="e1efc53e9bd149078b0c12aeaa6365df" \
+    -e RUN_ID="d083afe9a0f44058a273598b3d7eeb93" \
     -e TEST_RUN="True" \
     -v c:/Users/alexe/.aws:/root/.aws \
     stream-model-duration:v1
@@ -178,7 +181,7 @@ $(aws ecr get-login --no-include-email)
 Pushing 
 
 ```bash
-REMOTE_URI="387546586013.dkr.ecr.eu-west-1.amazonaws.com/duration-model"
+REMOTE_URI="975050357734.dkr.ecr.us-east-1.amazonaws.com/duration-model"
 REMOTE_TAG="v1"
 REMOTE_IMAGE=${REMOTE_URI}:${REMOTE_TAG}
 
